@@ -3,23 +3,34 @@ version: "3.9"
 services:
   devopsdb:
     image: anilrentikota/automation:db
-    ports:
-      - "3306:3306"
-    deploy:
-      replicas: 1
     networks:
       - mynetwork
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
 
   application:
     image: anilrentikota/automation:app
     ports:
-      - "1111:8080"
-    deploy:
-      replicas: 3
-    depends_on:
-      - devopsdb
+      - target: 8080
+        published: 1111
+        protocol: tcp
+        mode: ingress
     networks:
       - mynetwork
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 5
+      update_config:
+        parallelism: 1
+        delay: 10s
+        order: start-first
 
 networks:
   mynetwork:
