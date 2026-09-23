@@ -1,5 +1,3 @@
-version: "3.9"
-
 services:
   devopsdb:
     image: anilrentikota/automation:db
@@ -19,4 +17,4 @@ services:
 
 networks:
   mynetwork:
-    driver: overlay
+    driver: bridge
